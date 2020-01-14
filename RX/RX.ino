@@ -7,7 +7,13 @@
 //#include "libbuf.h"
 //#include "lib-adc-irq.h"
 
+#define MOTOR_EN_L 2    //line to enable H- bridge for left engine
+#define MOTOR_EN_B 3    // - || - right engine 
 
+#define MOTOR_L_A 5     //PWM A for left engine
+#define MOTOR_L_B 6     //PWM B for left engine
+#define MOTOR_B_A 9     //PWM A for right engine
+#define MOTOR_B_B 10    //PWM B for right engine
 
 #define CE 7
 #define CSN 8
@@ -16,6 +22,7 @@
 #define RX_BUF_SIZE 32     //Size of RX buffer
 #define ADDRESS_BUF_SIZE 5 //Size of buffer with pipeline address
 #define TO_SEND_SIZE 5     //Size of data to send
+
 const uint8_t addressRX[ADDRESS_BUF_SIZE] = {'P', 'I', 'L', 'O', 'T'};
 const uint8_t addressTX[ADDRESS_BUF_SIZE] = {'S', 'L', 'A', 'V', 'E'};
 
