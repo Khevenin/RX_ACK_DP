@@ -7,13 +7,13 @@
 //#include "libbuf.h"
 //#include "lib-adc-irq.h"
 
-#define MOTOR_EN_L 2    //line to enable H- bridge for left engine
-#define MOTOR_EN_B 3    // - || - right engine 
+#define MOTOR_EN_L 2 //line to enable H- bridge for left engine
+#define MOTOR_EN_R 3 // - || - right engine
 
-#define MOTOR_L_A 5     //PWM A for left engine
-#define MOTOR_L_B 6     //PWM B for left engine
-#define MOTOR_B_A 9     //PWM A for right engine
-#define MOTOR_B_B 10    //PWM B for right engine
+#define MOTOR_L_A 5  //PWM A for left engine
+#define MOTOR_L_B 6  //PWM B for left engine
+#define MOTOR_B_A 9  //PWM A for right engine
+#define MOTOR_B_B 10 //PWM B for right engine
 
 #define CE 7
 #define CSN 8
@@ -31,6 +31,11 @@ uint8_t bufferRX[RX_BUF_SIZE];
 
 uint32_t ackCounter = 0;
 uint32_t *pAckCounter = &ackCounter;
+
+uint8_t axisX = 128; //data from joystick
+uint8_t axisY = 128;
+uint8_t *pAxisX = &axisX;
+uint8_t *paxisY = &axisY;
 
 RF24 RX(CE, CSN); //set CE, CSN pins
 
@@ -62,7 +67,7 @@ void setup()
 
   RX.setAutoAck(1);
   Serial.println("Enable ACK.");
-  RX.enableDynamicPayloads() ;
+  RX.enableDynamicPayloads();
   Serial.println("Enable Dynamic Payload size.");
   RX.enableAckPayload(); //enable transmission ACK signal with Payload
   Serial.println("Enable ACK payload.");
@@ -82,29 +87,39 @@ void setup()
   printBuffer(bufferTX, TX_BUF_SIZE);
   printBuffer(bufferRX, RX_BUF_SIZE);
   Serial.println("TX and RX buffers reset done.\n");
-  bufferTX[0] = 65;  // 'A'
-  bufferTX[1] = 68;  // 'D';
-  bufferTX[2] = 72;  // 'K';                                 //init ACK - Payload message
-  bufferTX[4] = 0x0A; //EOL
+  bufferTX[0] = 65;                                  // 'A'
+  bufferTX[1] = 68;                                  // 'D';
+  bufferTX[2] = 72;                                  // 'K';                                 //init ACK - Payload message
+  bufferTX[4] = 0x0A;                                //EOL
   RX.writeAckPayload(1, bufferTX, sizeof(bufferTX)); //prepare msg to send
-
+  Serial.println("RF transmission start.\n");
   RX.startListening();
+  Serial.println("Engines enable.\n");
+  digitalWrite(MOTOR_EN_L, HIGH);
+  digitalWrite(MOTOR_EN_R, HIGH);
 }
 
 void loop()
 {
   if (RX.available())
   {
+    //Receiving
     uint8_t lenghtRX = RX.getDynamicPayloadSize();
     RX.read(bufferRX, lenghtRX);
+    //prit recived
     Serial.print("\nReceived data.");
     printBuffer(bufferRX, RX_BUF_SIZE);
+    *pAxisX = bufferRX[0];
+    *paxisY = bufferRX[1];
+
+    //Transmitting
     bufferTX[3] = ackCounter;
     RX.writeAckPayload(1, &bufferTX, TO_SEND_SIZE);
     Serial.print("\nTransmitted data.");
     printBuffer(bufferTX, TX_BUF_SIZE);
-    ackCounter ++;
-    if (ackCounter == 4294967295) {
+    ackCounter++;
+    if (ackCounter == 100000)
+    {
       ackCounter;
     }
   }
