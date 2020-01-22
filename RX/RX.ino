@@ -101,7 +101,7 @@ void setup()
 
 void loop()
 {
-  if (RX.available())
+  if (RX.available()) 
   {
     //Receiving
     uint8_t lenghtRX = RX.getDynamicPayloadSize();
@@ -113,7 +113,10 @@ void loop()
     *paxisY = bufferRX[1];
 
     //Transmitting
-    bufferTX[3] = ackCounter;
+    bufferTX[3] = ackCounter >> 24;
+    bufferTX[4] = ackCounter >> 16;
+    bufferTX[5] = ackCounter >> 8;
+    bufferTX[6] = ackCounter;
     RX.writeAckPayload(1, &bufferTX, TO_SEND_SIZE);
     Serial.print("\nTransmitted data.");
     printBuffer(bufferTX, TX_BUF_SIZE);
@@ -128,7 +131,7 @@ void loop()
 void updateCounter(uint32_t *counter)
 {
   *counter++;
-  if (*counter == 4294967295)
+  if (*counter == 100000)
     *counter = 0;
 }
 
