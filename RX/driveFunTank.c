@@ -23,37 +23,36 @@ void moveDecide(uint8_t x, uint8_t y)
     {
         forward(y);
     }
-    1 else if ((y > 124) && ((x > 120) && (x < 130))) //revers
+    if (checkRevers(x, y)) //revers
     {
         revers(y);
     }
-    else if (((y > 120) && (y < 130)) && (x < 124)) // left
+    if (checkLeft(x, y)) // left
     {
         left(x);
     }
-    else if (((y > 120) && (y < 130)) && (x > 124)) // right
+    if (checkRight(x, y)) // right
     {
         right(y);
     }
-    else if ((y < 124) && (x < 124)) //forward and left
+    if (checkForwardLeft(x, y)) //forward and left
     {
         forwardLeft(x, y);
     }
-    else if ((y < 124) && (x > 124)) //forward and right
+    if (checkForwardRight(x,y) //forward and right
     {
         forwardRight(x, y);
     }
-    else if ((y > 124) && (x < 124)) //revers and left
+    if (checkReversLeft(x,y)) //revers and left
     {
         reversLeft(x, x);
     }
-    else if ((y < 124) && (x > 124)) //revers and right
+    if (checkReversRight(x,y)) //revers and right
     {
         reversRight(x, y);
     }
-    else //stop
+    if (checkStop(x, y))
     {
-        //(((y > 120) && (y < 130)) && ((x > 120) && (x < 130)))
         stop();
     }
 }
