@@ -7,7 +7,7 @@
 
 uint8_t hightToLow(uint8_t a)
 {
-    return ((x - ADC_MID_HIGH) * 2); // i.e.
+    return ((a - ADC_MID_HIGH) * 2); // i.e.
 }
 
 uint8_t invert(uint8_t a)

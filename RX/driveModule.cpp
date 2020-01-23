@@ -9,7 +9,7 @@ void moveDecide(uint8_t x, uint8_t y)
     }
     if (checkRevers(x, y)) //revers
     {
-        revers(y);
+        reverse(y);
     }
     if (checkLeft(x, y)) // left
     {
@@ -23,7 +23,7 @@ void moveDecide(uint8_t x, uint8_t y)
     {
         forwardLeft(x, y);
     }
-    if (checkForwardRight(x,y) //forward and right
+    if (checkForwardRight(x,y)) //forward and right
     {
         forwardRight(x, y);
     }

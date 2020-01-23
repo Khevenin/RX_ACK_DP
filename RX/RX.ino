@@ -4,19 +4,8 @@
 #include <nRF24l01.h>
 #include <printf.h>
 
-//#include "libbuf.h"
-//#include "lib-adc-irq.h"
-
-#define MOTOR_EN_L 2 //line to enable H- bridge for left engine
-#define MOTOR_EN_R 3 // - || - right engine
-
-#define MOTOR_L_A 5  //PWM A for left engine
-#define MOTOR_L_B 6  //PWM B for left engine
-#define MOTOR_B_A 9  //PWM A for right engine
-#define MOTOR_B_B 10 //PWM B for right engine
-
-#define CE 7
-#define CSN 8
+#include "definedPins.h"
+#include "driveModule.h"
 
 #define TX_BUF_SIZE 32     //Size of TX buffer
 #define RX_BUF_SIZE 32     //Size of RX buffer
