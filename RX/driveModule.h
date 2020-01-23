@@ -3,6 +3,9 @@
  * @Date:23.01.2020
  * */
 
+#include "checkMove.h"
+#include "rescale.h"
+
 void moveDecide(uint8_t x, uint8_t);
 
 void forward(uint8_t y);
