@@ -93,6 +93,7 @@ void setup()
   
   /* Test of PWM signals */
   /* Test left forward */
+  /*
   Serial.println("Left engine forward - Pin 5 - PWM 75.\n");
   analogWrite(MOTOR_L_A, 75);
   delay(2000);
@@ -100,7 +101,7 @@ void setup()
   analogWrite(MOTOR_L_A, 255);
   delay(2000);
   analogWrite(MOTOR_L_A, 0);
-  /* Test left revers*/
+  // Test left revers 
   Serial.println("Left engine revers - Pin 6 - PWM 75.\n");
   analogWrite(MOTOR_L_B, 75);
   delay(2000);
@@ -109,7 +110,7 @@ void setup()
   delay(2000);
   analogWrite(MOTOR_L_B, 0);
 
-  /* Test right forward */
+  // Test right forward 
   Serial.println("Right engine forward - Pin 9 - PWM 75.\n");
   analogWrite(MOTOR_R_A, 75);
   delay(2000);
@@ -117,7 +118,7 @@ void setup()
   analogWrite(MOTOR_R_A, 255);
   delay(2000);
   analogWrite(MOTOR_R_A, 0);
-  /* Test right revers */ 
+  // Test right revers 
    Serial.println("Right engine revers - Pin 10 - PWM 75.\n");
   analogWrite(MOTOR_R_B, 75);
   delay(2000);
@@ -125,7 +126,7 @@ void setup()
   analogWrite(MOTOR_R_B, 255);
   delay(2000);
   analogWrite(MOTOR_R_B, 0);
-
+  */
 
   /* End of PWM test - PWM set as LOW */
   Serial.println("Left engine's PWM signals set LOW.\n");
