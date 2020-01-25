@@ -150,6 +150,8 @@ void loop()
     *pAxisX = bufferRX[0];
     *paxisY = bufferRX[1];
 
+    moveDecide(axisX, axisY);
+
     //Transmitting
     bufferTX[3] = ackCounter >> 24;
     bufferTX[4] = ackCounter >> 16;
@@ -175,7 +177,7 @@ void updateCounter(uint32_t *counter)
 
 void printBuffer(uint8_t *buf, size_t size)
 {
-  Serial.print("\nBuffer content.");
+  Serial.print("\nBuffer content: \n");
   for (size_t i = 0; i < size; i++)
   {
     Serial.print(buf[i]);

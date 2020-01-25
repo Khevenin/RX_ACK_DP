@@ -29,7 +29,7 @@ void moveDecide(uint8_t x, uint8_t y)
     }
     if (checkReversLeft(x,y)) //revers and left
     {
-        reversLeft(x, x);
+        reversLeft(x, y);
     }
     if (checkReversRight(x,y)) //revers and right
     {
@@ -110,6 +110,10 @@ void reversLeft(uint8_t x, uint8_t y)
     analogWrite(MOTOR_R_B, highToLow(y)); // for revers
     analogWrite(MOTOR_L_A, 0);
     analogWrite(MOTOR_L_B, 2 * x); //for left
+//    Serial.print("\nPWM MOTOR_R_B rescaled from hight o low interval: ");
+//    Serial.print(highToLow(y));
+//    Serial.print("\nPWM MOTOR_L_B rescaled x 2: ");
+//    Serial.print(2* x);
 }
 
 void reversRight(uint8_t x, uint8_t y)
