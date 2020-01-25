@@ -3,6 +3,7 @@
  * @Date:23.01.2020
  * 
  * */
+#include <Arduino.h>
 
 #define X_LOW 120
 #define X_HIGH 130

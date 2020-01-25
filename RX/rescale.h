@@ -3,6 +3,7 @@
  * @Date:23.01.2020
  * 
  * */
+#include <Arduino.h>
 
 #define ADC_HIGH 255
 #define ADC_MID_HIGH 128
@@ -12,7 +13,7 @@
  * Rescale value from high interval of ADC output 
  * ie. 128-255 to 0-255
  * */
-uint8_t hightToLow(uint8_t a); // a > reserved_interval i.e. ADC = 129 convert to PWM = 2
+uint8_t highToLow(uint8_t a); // a > reserved_interval i.e. ADC = 129 convert to PWM = 2
 
 /**
  * Invert scale of ADC output from 0 - 128 to 255 - 0.

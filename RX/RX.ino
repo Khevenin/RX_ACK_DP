@@ -4,19 +4,8 @@
 #include <nRF24l01.h>
 #include <printf.h>
 
-//#include "libbuf.h"
-//#include "lib-adc-irq.h"
-
-#define MOTOR_EN_L 2 //line to enable H- bridge for left engine
-#define MOTOR_EN_R 3 // - || - right engine
-
-#define MOTOR_L_A 5  //PWM A for left engine
-#define MOTOR_L_B 6  //PWM B for left engine
-#define MOTOR_B_A 9  //PWM A for right engine
-#define MOTOR_B_B 10 //PWM B for right engine
-
-#define CE 7
-#define CSN 8
+#include "definedPins.h"
+#include "driveModule.h"
 
 #define TX_BUF_SIZE 32     //Size of TX buffer
 #define RX_BUF_SIZE 32     //Size of RX buffer
@@ -32,8 +21,8 @@ uint8_t bufferRX[RX_BUF_SIZE];
 uint32_t ackCounter = 0;
 uint32_t *pAckCounter = &ackCounter;
 
-uint8_t axisX = 128; //data from joystick
-uint8_t axisY = 128;
+uint8_t axisX = 127; //data from joystick
+uint8_t axisY = 127;
 uint8_t *pAxisX = &axisX;
 uint8_t *paxisY = &axisY;
 
@@ -46,7 +35,9 @@ void updateCounter(uint32_t *counter);
 
 void setup()
 {
-
+  /* To fix bug of setting HIGH level on pin 10 after boot */
+  analogWrite(MOTOR_R_B, 0);
+  /* Serial port init */
   Serial.begin(115200);
   Serial.println("Serial port init done.");
 
@@ -94,14 +85,61 @@ void setup()
   RX.writeAckPayload(1, bufferTX, sizeof(bufferTX)); //prepare msg to send
   Serial.println("RF transmission start.\n");
   RX.startListening();
+  
   Serial.println("Engines enable.\n");
   digitalWrite(MOTOR_EN_L, HIGH);
   digitalWrite(MOTOR_EN_R, HIGH);
+  Serial.println("Enable PWM outputs for drive engines.\n");
+  
+  /* Test of PWM signals */
+  /* Test left forward */
+  /*
+  Serial.println("Left engine forward - Pin 5 - PWM 75.\n");
+  analogWrite(MOTOR_L_A, 75);
+  delay(2000);
+  Serial.println("Left engine forward - Pin 5 - PWM 255.\n");
+  analogWrite(MOTOR_L_A, 255);
+  delay(2000);
+  analogWrite(MOTOR_L_A, 0);
+  // Test left revers 
+  Serial.println("Left engine revers - Pin 6 - PWM 75.\n");
+  analogWrite(MOTOR_L_B, 75);
+  delay(2000);
+  Serial.println("Left engine revers - Pin 6 - PWM 255.\n");
+  analogWrite(MOTOR_L_B, 255);
+  delay(2000);
+  analogWrite(MOTOR_L_B, 0);
+
+  // Test right forward 
+  Serial.println("Right engine forward - Pin 9 - PWM 75.\n");
+  analogWrite(MOTOR_R_A, 75);
+  delay(2000);
+  Serial.println("Right engine forward - Pin 9 - PWM 255.\n");
+  analogWrite(MOTOR_R_A, 255);
+  delay(2000);
+  analogWrite(MOTOR_R_A, 0);
+  // Test right revers 
+   Serial.println("Right engine revers - Pin 10 - PWM 75.\n");
+  analogWrite(MOTOR_R_B, 75);
+  delay(2000);
+  Serial.println("Right engine revser - Pin 10 - PWM 255.\n");
+  analogWrite(MOTOR_R_B, 255);
+  delay(2000);
+  analogWrite(MOTOR_R_B, 0);
+  */
+
+  /* End of PWM test - PWM set as LOW */
+  Serial.println("Left engine's PWM signals set LOW.\n");
+  analogWrite(MOTOR_L_A, 0);
+  analogWrite(MOTOR_L_B, 0);
+  Serial.println("Right engine's PWM signals set LOW.\n");
+  analogWrite(MOTOR_R_A, 0);
+  analogWrite(MOTOR_R_B, 0);
 }
 
 void loop()
 {
-  if (RX.available()) 
+  if (RX.available())
   {
     //Receiving
     uint8_t lenghtRX = RX.getDynamicPayloadSize();
@@ -111,6 +149,8 @@ void loop()
     printBuffer(bufferRX, RX_BUF_SIZE);
     *pAxisX = bufferRX[0];
     *paxisY = bufferRX[1];
+
+    moveDecide(axisX, axisY);
 
     //Transmitting
     bufferTX[3] = ackCounter >> 24;
@@ -137,7 +177,7 @@ void updateCounter(uint32_t *counter)
 
 void printBuffer(uint8_t *buf, size_t size)
 {
-  Serial.print("\nBuffer content.");
+  Serial.print("\nBuffer content: \n");
   for (size_t i = 0; i < size; i++)
   {
     Serial.print(buf[i]);
