@@ -21,8 +21,8 @@ uint8_t bufferRX[RX_BUF_SIZE];
 uint32_t ackCounter = 0;
 uint32_t *pAckCounter = &ackCounter;
 
-uint8_t axisX = 128; //data from joystick
-uint8_t axisY = 128;
+uint8_t axisX = 127; //data from joystick
+uint8_t axisY = 127;
 uint8_t *pAxisX = &axisX;
 uint8_t *paxisY = &axisY;
 
