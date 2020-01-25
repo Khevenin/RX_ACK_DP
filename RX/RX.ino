@@ -35,7 +35,9 @@ void updateCounter(uint32_t *counter);
 
 void setup()
 {
-
+  /* To fix bug of setting HIGH level on pin 10 after boot */
+  analogWrite(MOTOR_R_B, 0);
+  /* Serial port init */
   Serial.begin(115200);
   Serial.println("Serial port init done.");
 
@@ -83,14 +85,60 @@ void setup()
   RX.writeAckPayload(1, bufferTX, sizeof(bufferTX)); //prepare msg to send
   Serial.println("RF transmission start.\n");
   RX.startListening();
+  
   Serial.println("Engines enable.\n");
   digitalWrite(MOTOR_EN_L, HIGH);
   digitalWrite(MOTOR_EN_R, HIGH);
+  Serial.println("Enable PWM outputs for drive engines.\n");
+  
+  /* Test of PWM signals */
+  /* Test left forward */
+  Serial.println("Left engine forward - Pin 5 - PWM 75.\n");
+  analogWrite(MOTOR_L_A, 75);
+  delay(2000);
+  Serial.println("Left engine forward - Pin 5 - PWM 255.\n");
+  analogWrite(MOTOR_L_A, 255);
+  delay(2000);
+  analogWrite(MOTOR_L_A, 0);
+  /* Test left revers*/
+  Serial.println("Left engine revers - Pin 6 - PWM 75.\n");
+  analogWrite(MOTOR_L_B, 75);
+  delay(2000);
+  Serial.println("Left engine revers - Pin 6 - PWM 255.\n");
+  analogWrite(MOTOR_L_B, 255);
+  delay(2000);
+  analogWrite(MOTOR_L_B, 0);
+
+  /* Test right forward */
+  Serial.println("Right engine forward - Pin 9 - PWM 75.\n");
+  analogWrite(MOTOR_R_A, 75);
+  delay(2000);
+  Serial.println("Right engine forward - Pin 9 - PWM 255.\n");
+  analogWrite(MOTOR_R_A, 255);
+  delay(2000);
+  analogWrite(MOTOR_R_A, 0);
+  /* Test right revers */ 
+   Serial.println("Right engine revers - Pin 10 - PWM 75.\n");
+  analogWrite(MOTOR_R_B, 75);
+  delay(2000);
+  Serial.println("Right engine revser - Pin 10 - PWM 255.\n");
+  analogWrite(MOTOR_R_B, 255);
+  delay(2000);
+  analogWrite(MOTOR_R_B, 0);
+
+
+  /* End of PWM test - PWM set as LOW */
+  Serial.println("Left engine's PWM signals set LOW.\n");
+  analogWrite(MOTOR_L_A, 0);
+  analogWrite(MOTOR_L_B, 0);
+  Serial.println("Right engine's PWM signals set LOW.\n");
+  analogWrite(MOTOR_R_A, 0);
+  analogWrite(MOTOR_R_B, 0);
 }
 
 void loop()
 {
-  if (RX.available()) 
+  if (RX.available())
   {
     //Receiving
     uint8_t lenghtRX = RX.getDynamicPayloadSize();
